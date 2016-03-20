@@ -34,4 +34,4 @@ RUN wget http://downloads.sourceforge.net/open-jtalk/open_jtalk_dic_utf_8-1.09.t
     mv open_jtalk_dic_utf_8-1.09 /usr/local/lib/open_jtalk_dic_utf_8-1.09 && \
     rm open_jtalk_dic_utf_8-1.09.tar.gz
 
-CMD ["which", "open_jtalk"]
+CMD ["open_jtalk", "-m", "/usr/local/lib/hts_voice_nitech_jp_atr503_m001-1.05/nitech_jp_atr503_m001.htsvoice", "-x", "/usr/local/lib/open_jtalk_dic_utf_8-1.09/", "-ow", "/tmp/hello.wav", "/tmp/hello.txt"]
