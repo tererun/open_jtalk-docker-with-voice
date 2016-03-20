@@ -1,4 +1,4 @@
-# openjtalk-docker
+# open_jtalk
 
 Open JTalkをDockerコンテナーで動作させます。
 
