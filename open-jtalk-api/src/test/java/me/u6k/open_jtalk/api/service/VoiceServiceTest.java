@@ -4,6 +4,7 @@ package me.u6k.open_jtalk.api.service;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,11 @@ public class VoiceServiceTest {
 
     @Test
     public void say() {
-        String result = _s.say();
+        byte[] result = _s.say("こんにちは");
 
-        assertThat(result, is("say"));
+        String md5 = "6863e3bcac79948b7c2cc24283d4571f";
+
+        assertThat(DigestUtils.md5Hex(result), is(md5));
     }
 
 }
