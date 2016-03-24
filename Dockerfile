@@ -33,4 +33,6 @@ RUN wget http://downloads.sourceforge.net/open-jtalk/open_jtalk_dic_utf_8-1.09.t
 # エントリーポイントをセットアップ
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
 
+RUN chmod a+x /usr/local/bin/entrypoint.sh
+
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
