@@ -30,7 +30,27 @@ RUN wget http://downloads.sourceforge.net/open-jtalk/open_jtalk_dic_utf_8-1.09.t
     tar zxvf open_jtalk_dic_utf_8-1.09.tar.gz && \
     cp -r open_jtalk_dic_utf_8-1.09 /usr/local/lib/open_jtalk_dic_utf_8-1.09
 
-# エントリーポイントをセットアップ
-COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
+# Oracle JDK 8をセットアップ
+RUN apt-get install -y software-properties-common && \
+    add-apt-repository -y ppa:webupd8team/java && \
+    apt-get update && \
+    echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
+    apt-get install -y oracle-java8-installer
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+
+RUN java -version
+
+# Mavenをセットアップ
+RUN apt-get install -y maven
+
+# Open JTalk APIをセットアップ
+COPY ./open-jtalk-api /usr/local/src/open-jtalk-api
+
+RUN cd open-jtalk-api/ && \
+    mvn clean package && \
+    cp /usr/local/src/open-jtalk-api/target/open-jtalk-api-0.5.0-SNAPSHOT.jar /usr/local/lib/open-jtalk-api.jar
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "/usr/local/lib/open-jtalk-api.jar"]
