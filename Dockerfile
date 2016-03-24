@@ -49,7 +49,7 @@ COPY ./open-jtalk-api /usr/local/src/open-jtalk-api
 
 RUN cd open-jtalk-api/ && \
     mvn clean package && \
-    cp /usr/local/src/open-jtalk-api/target/open-jtalk-api-0.0.1-SNAPSHOT.jar /usr/local/lib/open-jtalk-api.jar
+    cp /usr/local/src/open-jtalk-api/target/open-jtalk-api-0.4.0.jar /usr/local/lib/open-jtalk-api.jar
 
 EXPOSE 8080
 
