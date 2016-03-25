@@ -37,7 +37,7 @@ public class ActuatorTest {
                 .then() //
                 .statusCode(HttpStatus.OK.value()) //
                 .body("name", is("open-jtalk-api")) //
-                .body("version", is("0.5.0"));
+                .body("version", is("0.6.0-SNAPSHOT"));
     }
 
 }
