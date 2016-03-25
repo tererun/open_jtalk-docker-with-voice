@@ -1,6 +1,10 @@
 FROM u6kapps/open-jtalk-api-base
 MAINTAINER u6k <u6k.apps@gmail.com>
 
+# 依存ライブラリをキャッシュ
+COPY m2/ /root/.m2/
+
+# プロジェクトをビルド
 COPY open-jtalk-api/ /usr/local/src/open-jtalk-api/
 
 WORKDIR /usr/local/src/open-jtalk-api/
