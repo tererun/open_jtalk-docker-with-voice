@@ -55,12 +55,6 @@ public class OpenJTalkRepositoryImpl implements OpenJTalkRepository {
         File voiceDataFile = new File(workDir, voiceId.toString() + ".wav");
         String cmd = "open_jtalk -m /usr/local/lib/hts_voice_nitech_jp_atr503_m001-1.05/nitech_jp_atr503_m001.htsvoice -x /usr/local/lib/open_jtalk_dic_utf_8-1.09/ -ow " + voiceDataFile.getAbsolutePath() + " " + voiceTextFile.getAbsolutePath();
         L.debug("cmd=" + cmd);
-        try {
-            L.debug("txt=" + FileUtils.readFileToString(voiceTextFile));
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
         CommandLine cmdL = CommandLine.parse(cmd);
         DefaultExecutor cmdExec = new DefaultExecutor();
         cmdExec.setExitValue(0);
