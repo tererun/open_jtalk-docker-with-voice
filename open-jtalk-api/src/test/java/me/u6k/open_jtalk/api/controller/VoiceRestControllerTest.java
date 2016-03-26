@@ -36,8 +36,8 @@ public class VoiceRestControllerTest {
     }
 
     @Test
-    public void say_音声ファイルが出力される() {
-        Response resp = given().get("/voice?message=こんにちは");
+    public void say_テキストを指定して音声データを出力() {
+        Response resp = given().get("/voice?text=こんにちは");
         String md5 = "6863e3bcac79948b7c2cc24283d4571f";
 
         assertThat(resp.statusCode(), is(HttpStatus.OK.value()));
@@ -47,18 +47,37 @@ public class VoiceRestControllerTest {
     }
 
     @Test
-    public void say_パラメータ無しや間違えたパラメータは400() {
+    public void say_パラメータをいろいろ設定して音声データを出力() {
+        String url = "/voice?text=こんにちは&s=44000&p=128&a=0.5&b=0.1&r=1.5&fm=0.1&u=0.6&jm=1.1&jf=1.1&g=60.0&z=0";
+        Response resp = given().get(url);
+        String md5 = "569f434ab6f2295cc0617e9ac0b01877";
+
+        assertThat(resp.statusCode(), is(HttpStatus.OK.value()));
+        assertThat(resp.contentType(), is("audio/wav;charset=UTF-8"));
+        assertThat(resp.header("Content-Length"), is("55340"));
+        assertThat(DigestUtils.md5Hex(resp.asByteArray()), is(md5));
+    }
+
+    @Test
+    public void say_パラメータ未指定の場合はエラー() {
         Response resp = given().get("/voice");
 
         assertThat(resp.statusCode(), is(HttpStatus.BAD_REQUEST.value()));
 
-        resp = given().get("/voice?message=");
+        resp = given().get("/voice?text=");
 
         assertThat(resp.statusCode(), is(HttpStatus.BAD_REQUEST.value()));
 
-        resp = given().get("/voice?msg=こんにちは");
+        resp = given().get("/voice?txt=こんにちは");
 
         assertThat(resp.statusCode(), is(HttpStatus.BAD_REQUEST.value()));
+    }
+
+    @Test
+    public void say_パラメータに未定義の値を指定した場合はエラー() {
+        Response resp = given().get("/voice?text=こんにちは&r=-1.0");
+
+        assertThat(resp.statusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR.value()));
     }
 
 }

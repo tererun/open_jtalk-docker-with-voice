@@ -1,12 +1,15 @@
 
 package me.u6k.open_jtalk.api.domain;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.ExecuteException;
+import org.apache.commons.exec.PumpStreamHandler;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import me.u6k.open_jtalk.api.OpenJTalkRuntimeException;
+import me.u6k.open_jtalk.api.service.VoiceParameter;
 
 @Component
 public class OpenJTalkRepositoryImpl implements OpenJTalkRepository {
@@ -24,95 +28,84 @@ public class OpenJTalkRepositoryImpl implements OpenJTalkRepository {
     private String _workDir;
 
     @Override
-    public UUID createVoiceText(String message) {
-        L.debug("#createVoiceText: message=" + message);
-
-        UUID voiceId = UUID.randomUUID();
-        File workDir = new File(_workDir);
-        File voiceTextFile = new File(workDir, voiceId.toString() + ".txt");
+    public byte[] createVoice(VoiceParameter param) {
+        L.debug("#createVoiceSound: param=" + param);
         try {
+            File workDir = new File(_workDir);
+
+            UUID voiceId = UUID.randomUUID();
+            File voiceTextFile = new File(workDir, voiceId.toString() + ".txt");
             L.debug("write: " + voiceTextFile.getAbsolutePath());
-            FileUtils.writeStringToFile(voiceTextFile, message, "UTF-8");
+            FileUtils.writeStringToFile(voiceTextFile, param.getText(), "UTF-8");
             L.debug("write success");
-        } catch (IOException e) {
-            throw new OpenJTalkRuntimeException(e);
-        }
 
-        L.debug("return: " + voiceId.toString());
-        return voiceId;
-    }
+            File voiceDataFile = new File(workDir, voiceId.toString() + ".wav");
 
-    @Override
-    public byte[] createVoiceSound(UUID voiceId) {
-        L.debug("#createVoiceSound: voiceId=" + voiceId);
-
-        if (voiceId == null) {
-            throw new IllegalArgumentException("voiceId is null.");
-        }
-
-        File workDir = new File(_workDir);
-        File voiceTextFile = new File(workDir, voiceId.toString() + ".txt");
-        File voiceDataFile = new File(workDir, voiceId.toString() + ".wav");
-        String cmd = "open_jtalk -m /usr/local/lib/hts_voice_nitech_jp_atr503_m001-1.05/nitech_jp_atr503_m001.htsvoice -x /usr/local/lib/open_jtalk_dic_utf_8-1.09/ -ow " + voiceDataFile.getAbsolutePath() + " " + voiceTextFile.getAbsolutePath();
-        L.debug("cmd=" + cmd);
-        CommandLine cmdL = CommandLine.parse(cmd);
-        DefaultExecutor cmdExec = new DefaultExecutor();
-        cmdExec.setExitValue(0);
-        try {
-            int exitCode = cmdExec.execute(cmdL);
-            L.debug("exitCode=" + exitCode);
-            if (exitCode != 0) {
-                throw new IOException("exitCode is not zero.");
+            String cmd = "open_jtalk";
+            cmd += " -m /usr/local/lib/hts_voice_nitech_jp_atr503_m001-1.05/nitech_jp_atr503_m001.htsvoice";
+            cmd += " -x /usr/local/lib/open_jtalk_dic_utf_8-1.09/";
+            if (param.getSamplingFrequency() != null) {
+                cmd += " -s " + param.getSamplingFrequency();
             }
-        } catch (IOException e) {
-            throw new OpenJTalkRuntimeException(e);
-        }
+            if (param.getFramePeriod() != null) {
+                cmd += " -p " + param.getFramePeriod();
+            }
+            if (param.getAllPassConstant() != null) {
+                cmd += " -a " + param.getAllPassConstant();
+            }
+            if (param.getPostfilteringCoefficient() != null) {
+                cmd += " -b " + param.getPostfilteringCoefficient();
+            }
+            if (param.getSpeechSpeedRate() != null) {
+                cmd += " -r " + param.getSpeechSpeedRate();
+            }
+            if (param.getAdditionalHalftone() != null) {
+                cmd += " -fm " + param.getAdditionalHalftone();
+            }
+            if (param.getVoicedUnvoicedThreshold() != null) {
+                cmd += " -u " + param.getVoicedUnvoicedThreshold();
+            }
+            if (param.getWeightOfGvForSpectrum() != null) {
+                cmd += " -jm " + param.getWeightOfGvForSpectrum();
+            }
+            if (param.getWeightOfGvForLogF0() != null) {
+                cmd += " -jf " + param.getWeightOfGvForLogF0();
+            }
+            if (param.getVolume() != null) {
+                cmd += " -g " + param.getVolume();
+            }
+            if (param.getAudioBufferSize() != null) {
+                cmd += " -z " + param.getAudioBufferSize();
+            }
+            cmd += " -ow " + voiceDataFile.getAbsolutePath() + " " + voiceTextFile.getAbsolutePath();
+            L.debug("cmd=" + cmd);
 
-        byte[] voiceData;
-        try {
+            CommandLine cmdL = CommandLine.parse(cmd);
+            DefaultExecutor cmdExec = new DefaultExecutor();
+            ByteArrayOutputStream bout = new ByteArrayOutputStream();
+            cmdExec.setStreamHandler(new PumpStreamHandler(bout));
+            cmdExec.setExitValue(0);
+            try {
+                cmdExec.execute(cmdL);
+            } catch (ExecuteException e) {
+                throw new OpenJTalkRuntimeException(e.getMessage(), e);
+            }
+
             L.debug("read voiceFile: " + voiceDataFile.getAbsolutePath());
-            voiceData = FileUtils.readFileToByteArray(voiceDataFile);
+            byte[] voiceData = FileUtils.readFileToByteArray(voiceDataFile);
             L.debug("readed voiceFile: length=" + voiceData.length);
+
+            L.debug("voiceTextFile exists. deleting: " + voiceTextFile.getAbsolutePath());
+            FileUtils.forceDelete(voiceTextFile);
+            L.debug("deleted.");
+
+            L.debug("voiceDataFile exists: deleting: " + voiceDataFile.getAbsolutePath());
+            FileUtils.forceDelete(voiceDataFile);
+            L.debug("deleted.");
+
+            return voiceData;
         } catch (IOException e) {
             throw new OpenJTalkRuntimeException(e);
-        }
-
-        return voiceData;
-    }
-
-    @Override
-    public void deleteVoice(UUID voiceId) {
-        L.debug("#deleteVoice: voiceId=" + voiceId);
-
-        if (voiceId == null) {
-            throw new IllegalArgumentException("voiceId is null.");
-        }
-
-        File workDir = new File(_workDir);
-        File voiceTextFile = new File(workDir, voiceId.toString() + ".txt");
-        if (voiceTextFile.exists()) {
-            try {
-                L.debug("voiceTextFile exists. deleting: " + voiceTextFile.getAbsolutePath());
-                FileUtils.forceDelete(voiceTextFile);
-                L.debug("deleted.");
-            } catch (IOException e) {
-                throw new OpenJTalkRuntimeException(e);
-            }
-        } else {
-            L.debug("voiceTextFile not exists.");
-        }
-
-        File voiceDataFile = new File(workDir, voiceId.toString() + ".wav");
-        if (voiceDataFile.exists()) {
-            try {
-                L.debug("voiceDataFile exists: deleting: " + voiceDataFile.getAbsolutePath());
-                FileUtils.forceDelete(voiceDataFile);
-                L.debug("deleted.");
-            } catch (IOException e) {
-                throw new OpenJTalkRuntimeException(e);
-            }
-        } else {
-            L.debug("voiceDataFile not exists.");
         }
     }
 
