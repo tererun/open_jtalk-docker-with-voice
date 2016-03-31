@@ -1,4 +1,4 @@
-FROM u6kapps/open-jtalk-api-base
+FROM u6kapps/open-jtalk-api-base:0.6.1
 MAINTAINER u6k <u6k.apps@gmail.com>
 
 # 依存ライブラリをキャッシュ
@@ -10,7 +10,7 @@ COPY open-jtalk-api/ /usr/local/src/open-jtalk-api/
 WORKDIR /usr/local/src/open-jtalk-api/
 
 RUN mvn clean package && \
-    cp target/open-jtalk-api-0.6.0.jar /usr/local/lib/open-jtalk-api.jar
+    cp target/open-jtalk-api-0.6.1.jar /usr/local/lib/open-jtalk-api.jar
 
 EXPOSE 8080
 
