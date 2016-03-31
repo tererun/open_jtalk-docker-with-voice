@@ -15,9 +15,12 @@ RUN wget http://downloads.sourceforge.net/hts-engine/hts_engine_API-1.10.tar.gz 
     make && \
     make install
 
+COPY manobi.patch manobi.patch
+
 RUN wget http://downloads.sourceforge.net/open-jtalk/open_jtalk-1.09.tar.gz && \
     tar zxvf open_jtalk-1.09.tar.gz && \
     cd open_jtalk-1.09/ && \
+    patch -p0 < /usr/local/src/manobi.patch && \
     ./configure --with-hts-engine-header-path=/usr/local/include --with-hts-engine-library-path=/usr/local/lib --with-charset=UTF-8 && \
     make && \
     make install
