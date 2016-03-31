@@ -3,7 +3,7 @@ MAINTAINER u6k <u6k.apps@gmail.com>
 
 # ビルドに必要なソフトウェアをインストール
 RUN apt-get update && \
-    apt-get install -y wget git build-essential
+    apt-get install -y wget git build-essential unzip
 
 WORKDIR /usr/local/src/
 
@@ -29,6 +29,10 @@ RUN wget http://downloads.sourceforge.net/open-jtalk/hts_voice_nitech_jp_atr503_
 RUN wget http://downloads.sourceforge.net/open-jtalk/open_jtalk_dic_utf_8-1.09.tar.gz && \
     tar zxvf open_jtalk_dic_utf_8-1.09.tar.gz && \
     cp -r open_jtalk_dic_utf_8-1.09 /usr/local/lib/open_jtalk_dic_utf_8-1.09
+
+RUN wget -O MMDAgent_Example-1.6.zip http://sourceforge.net/projects/mmdagent/files/MMDAgent_Example/MMDAgent_Example-1.6/MMDAgent_Example-1.6.zip/download && \
+    unzip MMDAgent_Example-1.6.zip && \
+    cp -r MMDAgent_Example-1.6/ /usr/local/lib/MMDAgent_Example-1.6/
 
 # エントリーポイントをセットアップ
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
