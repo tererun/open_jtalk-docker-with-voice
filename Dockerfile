@@ -1,4 +1,4 @@
-FROM u6kapps/open-jtalk-api-base
+FROM u6kapps/open-jtalk-api-base:0.6.1
 MAINTAINER u6k <u6k.apps@gmail.com>
 
 # 依存ライブラリをキャッシュ
