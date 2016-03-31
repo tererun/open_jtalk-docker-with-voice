@@ -1,4 +1,4 @@
-FROM u6kapps/open_jtalk:0.5.0
+FROM u6kapps/open_jtalk:0.6.1
 MAINTAINER u6k <u6k.apps@gmail.com>
 
 # Oracle JDK 8をセットアップ
