@@ -7,7 +7,7 @@ RUN apt-get update && \
 
 WORKDIR /usr/local/src/
 
-# Open JTalk関連のソフトウェアをセットアップ
+# Open JTalkをセットアップ
 RUN wget http://downloads.sourceforge.net/hts-engine/hts_engine_API-1.10.tar.gz && \
     tar zxvf hts_engine_API-1.10.tar.gz && \
     cd hts_engine_API-1.10/ && \
@@ -22,17 +22,21 @@ RUN wget http://downloads.sourceforge.net/open-jtalk/open_jtalk-1.09.tar.gz && \
     make && \
     make install
 
-RUN wget http://downloads.sourceforge.net/open-jtalk/hts_voice_nitech_jp_atr503_m001-1.05.tar.gz && \
-    tar zxvf hts_voice_nitech_jp_atr503_m001-1.05.tar.gz && \
-    cp -r hts_voice_nitech_jp_atr503_m001-1.05 /usr/local/lib/hts_voice_nitech_jp_atr503_m001-1.05
-
+# 辞書をセットアップ
 RUN wget http://downloads.sourceforge.net/open-jtalk/open_jtalk_dic_utf_8-1.09.tar.gz && \
     tar zxvf open_jtalk_dic_utf_8-1.09.tar.gz && \
-    cp -r open_jtalk_dic_utf_8-1.09 /usr/local/lib/open_jtalk_dic_utf_8-1.09
+    cp -r open_jtalk_dic_utf_8-1.09 /usr/local/lib/open_jtalk_dic
 
-RUN wget -O MMDAgent_Example-1.6.zip http://sourceforge.net/projects/mmdagent/files/MMDAgent_Example/MMDAgent_Example-1.6/MMDAgent_Example-1.6.zip/download && \
+# 音響モデルをセットアップ
+RUN mkdir /usr/local/lib/htsvoice/
+
+RUN wget http://downloads.sourceforge.net/open-jtalk/hts_voice_nitech_jp_atr503_m001-1.05.tar.gz && \
+    tar zxvf hts_voice_nitech_jp_atr503_m001-1.05.tar.gz && \
+    cp hts_voice_nitech_jp_atr503_m001-1.05/nitech_jp_atr503_m001.htsvoice /usr/local/lib/htsvoice/
+
+RUN wget http://downloads.sourceforge.net/mmdagent/MMDAgent_Example-1.6.zip && \
     unzip MMDAgent_Example-1.6.zip && \
-    cp -r MMDAgent_Example-1.6/ /usr/local/lib/MMDAgent_Example-1.6/
+    cp MMDAgent_Example-1.6/Voice/mei/*.htsvoice /usr/local/lib/htsvoice/
 
 # エントリーポイントをセットアップ
 COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
