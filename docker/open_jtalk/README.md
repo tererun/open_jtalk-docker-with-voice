@@ -32,12 +32,12 @@ echo こんばんは | docker run -i --rm -e OPEN_JTALK_OPTIONS="-s 48000 -p 300
 
 ## 指定できる音声ファイル
 
-/usr/local/lib/htsvoice/nitech_jp_atr503_m001.htsvoice
-/usr/local/lib/htsvoice/mei_angry.htsvoice
-/usr/local/lib/htsvoice/mei_bashful.htsvoice
-/usr/local/lib/htsvoice/mei_happy.htsvoice
-/usr/local/lib/htsvoice/mei_normal.htsvoice
-/usr/local/lib/htsvoice/mei_sad.htsvoice
+* /usr/local/lib/htsvoice/nitech_jp_atr503_m001.htsvoice
+* /usr/local/lib/htsvoice/mei_angry.htsvoice
+* /usr/local/lib/htsvoice/mei_bashful.htsvoice
+* /usr/local/lib/htsvoice/mei_happy.htsvoice
+* /usr/local/lib/htsvoice/mei_normal.htsvoice
+* /usr/local/lib/htsvoice/mei_sad.htsvoice
 
 ## 使用している主なソフトウェア
 
