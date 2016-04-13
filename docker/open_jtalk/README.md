@@ -21,14 +21,23 @@ echo こんにちは | docker run -i --rm u6kapps/open_jtalk > hello.wav
 |環境変数|意味|デフォルト値|
 |---|---|---|
 |`OPEN_JTALK_OPTIONS`|音声ファイル、辞書ディレクトリ以外の`open_jtalk`に渡すオプション|`-s 48000 -p 240`|
-|`OPEN_JTALK_VOICE_FILE`|`-m`で指定する音声ファイル。変更する必要はありません|`/usr/local/lib/hts_voice_nitech_jp_atr503_m001-1.05/nitech_jp_atr503_m001.htsvoice`|
-|`OPEN_JTALK_DIC_DIR`|`-x`で指定する辞書ディレクトリ。変更する必要はありません|`/usr/local/lib/open_jtalk_dic_utf_8-1.09`|
+|`OPEN_JTALK_VOICE_FILE`|`-m`で指定する音声ファイル。「指定できる音声ファイル」を参照|`/usr/local/lib/htsvoice/nitech_jp_atr503_m001.htsvoice`|
+|`OPEN_JTALK_DIC_DIR`|`-x`で指定する辞書ディレクトリ。変更する必要はありません|`/usr/local/lib/open_jtalk_dic`|
 
 環境変数を指定する場合は、以下のように指定します。
 
 ```
 echo こんばんは | docker run -i --rm -e OPEN_JTALK_OPTIONS="-s 48000 -p 300" u6kapps/open_jtalk > hello.wav
 ```
+
+## 指定できる音声ファイル
+
+* /usr/local/lib/htsvoice/nitech_jp_atr503_m001.htsvoice
+* /usr/local/lib/htsvoice/mei_angry.htsvoice
+* /usr/local/lib/htsvoice/mei_bashful.htsvoice
+* /usr/local/lib/htsvoice/mei_happy.htsvoice
+* /usr/local/lib/htsvoice/mei_normal.htsvoice
+* /usr/local/lib/htsvoice/mei_sad.htsvoice
 
 ## 使用している主なソフトウェア
 
@@ -44,6 +53,7 @@ echo こんばんは | docker run -i --rm -e OPEN_JTALK_OPTIONS="-s 48000 -p 300
 * Nitech Japanese Speech Database "NIT ATR503 M001"
     * Webサイト: [HMM-based speech synthesis system (HTS)](http://hts.sp.nitech.ac.jp/)
     * ライセンス: [Creative Commons Attribution 3.0](https://creativecommons.org/licenses/by/3.0/)
+* MMDAgent
 
 ## リンク
 
