@@ -1,5 +1,5 @@
 FROM u6kapps/open-jtalk-api-base:0.6.1
-MAINTAINER u6k <u6k.apps@gmail.com>
+MAINTAINER  <u6k.apps@gmail.com>
 
 # 依存ライブラリをキャッシュ
 COPY m2/ /root/.m2/
