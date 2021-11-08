@@ -3,7 +3,7 @@ MAINTAINER u6k <u6k.apps@gmail.com>
 
 # ビルドに必要なソフトウェアをインストール
 RUN apt-get update && \
-    apt-get install -y wget git build-essential
+    apt-get install -y wget git build-essential unzip
 
 WORKDIR /usr/local/src/
 
