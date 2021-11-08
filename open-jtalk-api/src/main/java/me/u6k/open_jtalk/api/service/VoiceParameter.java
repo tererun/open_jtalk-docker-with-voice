@@ -6,27 +6,17 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class VoiceParameter {
 
     private String text;
-
+    private String voice;
     private Integer samplingFrequency;
-
     private Integer framePeriod;
-
     private Float allPassConstant;
-
     private Float postfilteringCoefficient;
-
     private Float speechSpeedRate;
-
     private Float additionalHalftone;
-
     private Float voicedUnvoicedThreshold;
-
     private Float weightOfGvForSpectrum;
-
     private Float weightOfGvForLogF0;
-
     private Float volume;
-
     private Integer audioBufferSize;
 
     public String getText() {
@@ -35,6 +25,14 @@ public class VoiceParameter {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getVoice() {
+        return voice;
+    }
+
+    public void setVoice(String voice) {
+        this.voice = voice;
     }
 
     public Integer getSamplingFrequency() {

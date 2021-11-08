@@ -23,21 +23,23 @@ public class VoiceRestController {
 
     @RequestMapping(method = RequestMethod.GET, produces = "audio/wav")
     public byte[] say(@RequestParam(name = "text") String text, //
-            @RequestParam(name = "s", required = false) Integer samplingFrequency, //
-            @RequestParam(name = "p", required = false) Integer framePeriod, //
-            @RequestParam(name = "a", required = false) Float allPassConstant, //
-            @RequestParam(name = "b", required = false) Float postfilteringCoefficient, //
-            @RequestParam(name = "r", required = false) Float speechSpeedRate, //
-            @RequestParam(name = "fm", required = false) Float additionalHalftone, //
-            @RequestParam(name = "u", required = false) Float voicedUnvoicedThreshold, //
-            @RequestParam(name = "jm", required = false) Float weightOfGvForSpectrum, //
-            @RequestParam(name = "jf", required = false) Float weightOfGvForLogF0, //
-            @RequestParam(name = "g", required = false) Float volume, //
-            @RequestParam(name = "z", required = false) Integer audioBufferSize) {
+                      @RequestParam(name = "voice", required = false) String voice, //
+                      @RequestParam(name = "s", required = false) Integer samplingFrequency, //
+                      @RequestParam(name = "p", required = false) Integer framePeriod, //
+                      @RequestParam(name = "a", required = false) Float allPassConstant, //
+                      @RequestParam(name = "b", required = false) Float postfilteringCoefficient, //
+                      @RequestParam(name = "r", required = false) Float speechSpeedRate, //
+                      @RequestParam(name = "fm", required = false) Float additionalHalftone, //
+                      @RequestParam(name = "u", required = false) Float voicedUnvoicedThreshold, //
+                      @RequestParam(name = "jm", required = false) Float weightOfGvForSpectrum, //
+                      @RequestParam(name = "jf", required = false) Float weightOfGvForLogF0, //
+                      @RequestParam(name = "g", required = false) Float volume, //
+                      @RequestParam(name = "z", required = false) Integer audioBufferSize) {
         L.debug("#say");
 
         VoiceParameter param = new VoiceParameter();
         param.setText(text);
+        param.setVoice(voice);
         param.setSamplingFrequency(samplingFrequency);
         param.setFramePeriod(framePeriod);
         param.setAllPassConstant(allPassConstant);
