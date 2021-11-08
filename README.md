@@ -1,4 +1,4 @@
-# open-jtalk-api
+# open_jtalk-docker-with-voice
 
 Open JTalkをWebAPIとして使用します。
 
@@ -23,6 +23,7 @@ curl -v -o hello.wav http://localhost:8080/voice?text=こんにちは
 |パラメータ名|型|意味|省略時|設定範囲|
 |---|---|---|---|---|
 |text|string|voice text|required||
+|voice|string|voice path|/usr/local/lib/hts_voice_nitech_jp_atr503_m001-1.05/nitech_jp_atr503_m001.htsvoice||
 |s|integer|sampling frequency|auto|1--|
 |p|integer|frame period (point)|auto|1--|
 |a|float|all-pass constant|auto|0.0--1.0|
