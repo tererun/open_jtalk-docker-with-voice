@@ -7,7 +7,14 @@ Open JTalkをWebAPIとして使用します。
 以下のコマンドで、open-jtalk-apiコンテナーが起動して、WebAPIで待ち受けるようになります。
 
 ```
-docker run -d -p 8080:8080 u6kapps/open-jtalk-api
+$ git clone https://github.com/tererun/open_jtalk-docker-with-voice.git
+$ cd open_jtalk-docker-with-voice
+$ docker build -t open_jtalk-docker-with-voice:v1 .
+$ docker images
+REPOSITORY                    TAG       IMAGE ID       CREATED          SIZE
+open_jtalk-docker-with-voice  v1        000000000000   30 minutes ago   3.27GB
+u6kapps/open-jtalk-api-base   0.6.1     111111111111   5 years ago      1.52GB
+$ docker run -d -p 8080:8080 000000000000
 ```
 
 ## 使い方
